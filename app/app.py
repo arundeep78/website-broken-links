@@ -1,5 +1,5 @@
 import streamlit as st
-import app.utils as utils
+import  utils
 import time
 from humanize import naturaltime, naturaldelta
 
