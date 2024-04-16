@@ -31,7 +31,7 @@ with col2:
     st.text('')
     st.text('')
 
-    submitted= st.button("Submit")
+    submitted= st.button("Scan")
 # add paramter configuration in the side bar
 with st.sidebar:
   #set paramter variables
