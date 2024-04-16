@@ -20,6 +20,14 @@ class LinkOrigin(StrEnum):
     INTERNAL = "Internal"
     EXTERNAL = "External"
 
+def validate_integer(input_string):
+    try:
+        # Try to convert the string to an integer
+        int(input_string)
+        return True
+    except ValueError:
+        # If a ValueError is raised, the string cannot be converted to an integer
+        return False
 
 def set_last_processed_website(url):
     os.environ[LAST_PROCESSED_WEBSITE] = url

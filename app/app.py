@@ -1,12 +1,12 @@
 import streamlit as st
 import  utils
+import fragments
 import time
-from humanize import naturaltime, naturaldelta
+from humanize import naturaldelta
 
 #set streamlit UI to wide screen mode
 st.set_page_config(layout="wide")
 
-# Streamlit UI
 st.title("Find Broken links in your website")
 
 # Make sure that muffet is accessible
@@ -15,20 +15,41 @@ try:
 
 except:
     # st.warning("Search tool is not accessible. Application cannot work without it. Please contact developer or create a github issue.")
-    st.error("The search tool is not accessible for some reason. Application cannot work without it. Please contact developer or create agithub issue.")
+    st.error("The search tool is not accessible for some reason. Application cannot work without it. Please contact developer or create a github issue.")
+
 
 # Input section
 
-col1, col2 = st.columns(2)
+col1, col2 = st.columns([70,30],)
+
 with col1:
     test_website_url = st.text_input("Enter the URL",value="https://example.com",
-                        help="Enter a url of the website for which you want to find broken links.Only enter the main domain include https://")
-    show_success = st.checkbox("Show successful results as well",help="By default application only reports broken links. Select the checkbox, if you want result on successful links as well")
-    ignore_verify_tls = st.checkbox("Ignore TLS certificate verification",help="By default application check for TLS certificate verification as well. Select this box to skip the verification.")
-with col2:
-    rate_limit = st.number_input("Rate limit",help="Maximum requests made to website in a second. Enter an integer value.",format='%d',step=1,value =20, min_value=0   )
+                    help="Enter a url of the website for which you want to find broken links.Only enter the main domain include https://")
 
-if st.button("Submit"):
+with col2:
+    # st.subheader('')
+    st.text('')
+    st.text('')
+
+    submitted= st.button("Submit")
+# add paramter configuration in the side bar
+with st.sidebar:
+  #set paramter variables
+  show_success,ignore_verify_tls,rate_limit = fragments.fg_set_parameters()
+
+
+
+
+# hide the button
+
+
+if submitted:
+
+
+    if not utils.validate_integer(rate_limit):
+        st.error("Rate limit should be an integer value")
+        st.stop()
+    
 
     if rate_limit == 0:
         rate_limit = None
@@ -54,7 +75,7 @@ if st.button("Submit"):
     # write a text line showing summary of results dataframe
     if len(results) == 0:
 
-        st.write(f"No broken links found on website : {test_website_url}")
+        st.header(f"Congratulations! No broken links found on website : {test_website_url}")
     else:
 
         # create summary variables
@@ -161,5 +182,7 @@ if st.button("Submit"):
             # sub_heading += f" | {count_unique_externals_error}{'' if count_unique_externals == 0 else '/'+ str(count_unique_externals)}"
             # st.subheader(sub_heading)
             st.write(external_links)
+
+
 
 

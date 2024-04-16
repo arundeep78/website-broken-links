@@ -20,7 +20,8 @@
 		"vscode": {
 			"extensions": [
 				"ms-azuretools.vscode-docker",
-				"AMiner.codegeex"
+				"AMiner.codegeex",
+				"GitHub.vscode-pull-request-github"
 			]
 		}
 	}
