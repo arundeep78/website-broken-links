@@ -21,7 +21,9 @@
 			"extensions": [
 				"ms-azuretools.vscode-docker",
 				"AMiner.codegeex",
-				"GitHub.vscode-pull-request-github"
+				"GitHub.vscode-pull-request-github",
+				"ms-python.python",
+				"github.vscode-github-actions"
 			]
 		}
 	}
