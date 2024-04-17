@@ -3,8 +3,10 @@ name: Docker Image CI
 on:
   push:
     branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+ 
+env:
+  TEST_TAG: user/app:test
+  
 
 jobs:
 
@@ -13,6 +15,41 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag arundeep768/website-broken-links:$(date +%s)
+    - 
+      name: Docker meta
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        # list of Docker images to use as base name for tags
+        images: |
+          name/app
+          ghcr.io/username/app            
+        # generate Docker tags based on the following events/attributes
+        tags: |
+          type=sha,prefix={{branch}}-           
+    - 
+      name: Login to Docker
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+    -
+      name: Build and export to Docker
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        load: true
+        tags: ${{ env.TEST_TAG }}
+    - name: Test
+      run: |
+          docker run --rm ${{ env.TEST_TAG }}   
+    - 
+      name: Push the Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        file: Dockerfile
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+      
