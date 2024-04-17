@@ -20,7 +20,9 @@ jobs:
     - name: Get repo name
       run: |
         echo "${GITHUB_REPOSITORY##*/}" 
-        echo "${{ github.repository }}"
+        echo "${ github.repository }"
+        echo "${ github.repository_owner }"
+        echo "${ github.repository_name }"
     - 
       name: Docker meta
       id: meta
@@ -28,7 +30,7 @@ jobs:
       with:
         # list of Docker images to use as base name for tags
         images: |
-          ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.repository }}
+          ${{ github.repository_owner }}/${{ github.repository }}
               
         # generate Docker tags based on the following events/attributes
         tags: |
