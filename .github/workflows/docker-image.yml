@@ -18,11 +18,11 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
     - name: Get repo name
+      env:
+        GITHUB_CONTEXT: ${{ toJSON(github) }}
       run: |
         echo "${GITHUB_REPOSITORY##*/}" 
-        echo "${ github.repository }"
-        echo "${ github.repository_owner }"
-        echo "${ github.repository_name }"
+        echo "${GITHUB_CONTEXT}"
     - 
       name: Docker meta
       id: meta
@@ -30,7 +30,7 @@ jobs:
       with:
         # list of Docker images to use as base name for tags
         images: |
-          ${{ github.repository_owner }}/${{ github.repository }}
+          ${{ github.repository }}
               
         # generate Docker tags based on the following events/attributes
         tags: |
