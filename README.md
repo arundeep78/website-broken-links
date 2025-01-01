@@ -15,6 +15,7 @@ Run the Docker image using `docker run -p 8501:8501 arundeep78/website-broken-li
 3. Click the "Scan" button
 4. Wait for the scan to complete
 5. View the results in the web interface
+6. Click the "Download report as PDF" button to download the report as a PDF file
 
 ## Features
 
@@ -27,7 +28,7 @@ Run the Docker image using `docker run -p 8501:8501 arundeep78/website-broken-li
 - Download broken links table for internal, external or complete set
 - Supports max requests rate limit
 - Supports ignoring TLS certificate checks
-
+- Download the report as a PDF file
 
 ## Limitations - what may come next
 
