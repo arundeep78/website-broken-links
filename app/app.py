@@ -3,6 +3,7 @@ import  utils
 import fragments
 import time
 from humanize import naturaldelta
+from utils import generate_pdf_report, get_pdf_download_link
 
 #set streamlit UI to wide screen mode
 st.set_page_config(layout="wide")
@@ -122,6 +123,10 @@ if submitted:
         with col2:
             # Add a link for the download of whole results dataframe
             st.markdown(utils.get_table_download_link(results), unsafe_allow_html=True,)
+            # Add a button for downloading the report as a PDF
+            if st.button("Download report as PDF"):
+                generate_pdf_report(results)
+                st.markdown(get_pdf_download_link(), unsafe_allow_html=True)
      
         if not 'error' in results.columns:
          
@@ -182,7 +187,3 @@ if submitted:
             # sub_heading += f" | {count_unique_externals_error}{'' if count_unique_externals == 0 else '/'+ str(count_unique_externals)}"
             # st.subheader(sub_heading)
             st.write(external_links)
-
-
-
-

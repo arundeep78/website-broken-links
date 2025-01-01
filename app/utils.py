@@ -8,6 +8,8 @@ import requests
 import os
 import shutil
 import pandas as pd
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
 
 MUFFET_PATH = "MUFFET_PATH"
 LAST_PROCESSED_WEBSITE = "LAST_PROCESSED_WEBSITE"
@@ -200,4 +202,51 @@ def get_table_download_link(df):
     href = f'<a href="data:file/csv;base64,{b64}" download="broken_links.csv">Download complete results as csv file</a>'
     return href
 
+def generate_pdf_report(df, filename="report.pdf"):
+    """Generates a PDF report from the given dataframe
+    in:  dataframe
+    out: None
+    """
+    c = canvas.Canvas(filename, pagesize=letter)
+    width, height = letter
 
+    # Title
+    c.setFont("Helvetica-Bold", 16)
+    c.drawString(30, height - 40, "Broken Links Report")
+
+    # Overview Table
+    c.setFont("Helvetica-Bold", 12)
+    c.drawString(30, height - 80, "Overview Table")
+    c.setFont("Helvetica", 10)
+    overview_data = df.describe().transpose()
+    y = height - 100
+    for col in overview_data.columns:
+        c.drawString(30, y, col)
+        y -= 20
+        for val in overview_data[col]:
+            c.drawString(50, y, str(val))
+            y -= 20
+
+    # Details Table
+    c.setFont("Helvetica-Bold", 12)
+    c.drawString(30, y - 40, "Details Table")
+    c.setFont("Helvetica", 10)
+    y -= 60
+    for index, row in df.iterrows():
+        c.drawString(30, y, str(row.to_dict()))
+        y -= 20
+        if y < 50:
+            c.showPage()
+            y = height - 50
+
+    c.save()
+
+def get_pdf_download_link(filename="report.pdf"):
+    """Generates a link allowing the PDF report to be downloaded
+    in:  filename
+    out: href string
+    """
+    with open(filename, "rb") as pdf_file:
+        b64 = base64.b64encode(pdf_file.read()).decode()
+    href = f'<a href="data:application/pdf;base64,{b64}" download="{filename}">Download report as PDF</a>'
+    return href
